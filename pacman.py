@@ -33,20 +33,32 @@ class Maze:
                     pygame.draw.rect(window, MAZE_COLOUR, (x, y, TILE_SIZE, TILE_SIZE))
 
 class Pacman:
-    def __init__(self, x, y):
+    def __init__(self, x, y, direction):
         self.x = x
         self.y = y
+        self.direction = direction
     def draw(self, window):
-        window.blit(PACMAN_IMAGE, (self.x, self.y))
+        if self.direction == 'right':
+            window.blit(PACMAN_IMAGE, (self.x, self.y))
+        elif self.direction == 'up':
+            window.blit(pygame.transform.rotate(PACMAN_IMAGE, 90), (self.x, self.y))
+        elif self.direction == 'left':
+            window.blit(pygame.transform.rotate(PACMAN_IMAGE, 180), (self.x, self.y))
+        elif self.direction == 'down':
+            window.blit(pygame.transform.rotate(PACMAN_IMAGE, 270), (self.x, self.y))
     def move(self, up, down, left, right):
         if up:
             self.y -= PACMAN_VEL
+            self.direction = 'up'
         elif down:
             self.y += PACMAN_VEL
+            self.direction = 'down'
         elif left:
             self.x -= PACMAN_VEL
+            self.direction = 'left'
         elif right:
-            self.x += PACMAN_VEL    
+            self.x += PACMAN_VEL
+            self.direction = 'right'
 
 def draw(window, maze, pacman):
     window.fill(BLACK)
@@ -73,7 +85,7 @@ def main(window):
         [1,1,1,1,0,1,1,1,0,1,1,1,1]
         ])
     
-    pacman = Pacman((WIDTH-TILE_SIZE+2.5) // 2, (HEIGHT-TILE_SIZE+2.5) // 2)
+    pacman = Pacman((WIDTH-TILE_SIZE+2.5) // 2, (HEIGHT-TILE_SIZE+2.5) // 2, 'right')
     
     while run:
         clock.tick(FPS)
