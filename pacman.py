@@ -33,10 +33,14 @@ class Maze:
                     pygame.draw.rect(window, MAZE_COLOUR, (x, y, TILE_SIZE, TILE_SIZE))
 
 class Pacman:
-    def __init__(self, x, y, direction):
-        self.x = x
-        self.y = y
-        self.direction = direction
+    def __init__(self, row, col):
+        self.row = row
+        self.col = col
+        self.y = row * TILE_SIZE
+        self.x = col * TILE_SIZE
+        self.direction = 'right'
+        self.dir_x = 0
+        self.dir_y = 0
     def draw(self, window):
         if self.direction == 'right':
             window.blit(PACMAN_IMAGE, (self.x, self.y))
@@ -46,19 +50,25 @@ class Pacman:
             window.blit(pygame.transform.rotate(PACMAN_IMAGE, 180), (self.x, self.y))
         elif self.direction == 'down':
             window.blit(pygame.transform.rotate(PACMAN_IMAGE, 270), (self.x, self.y))
-    def move(self, up, down, left, right):
-        if up:
-            self.y -= PACMAN_VEL
-            self.direction = 'up'
-        elif down:
-            self.y += PACMAN_VEL
+    def move(self, maze):
+        if self.dir_y == 1:
             self.direction = 'down'
-        elif left:
-            self.x -= PACMAN_VEL
-            self.direction = 'left'
-        elif right:
-            self.x += PACMAN_VEL
+        elif self.dir_y == -1:
+            self.direction = 'up'
+        elif self.dir_x == 1:
             self.direction = 'right'
+        elif self.dir_x == -1:
+            self.direction = 'left'
+        
+        next_x = self.x + self.dir_x * PACMAN_VEL
+        next_y = self.y + self.dir_y * PACMAN_VEL
+
+        tile_col = next_x // TILE_SIZE
+        tile_row = next_y // TILE_SIZE
+
+        if not maze.is_wall(tile_row, tile_col):
+            self.x = next_x
+            self.y = next_y
 
 def draw(window, maze, pacman):
     window.fill(BLACK)
@@ -85,7 +95,7 @@ def main(window):
         [1,1,1,1,0,1,1,1,0,1,1,1,1]
         ])
     
-    pacman = Pacman((WIDTH-TILE_SIZE+2.5) // 2, (HEIGHT-TILE_SIZE+2.5) // 2, 'right')
+    pacman = Pacman(6, 6)
     
     while run:
         clock.tick(FPS)
@@ -95,10 +105,22 @@ def main(window):
                 run = False
                 break
         keys = pygame.key.get_pressed()
-        pacman.move(up=keys[pygame.K_UP], 
-                    down=keys[pygame.K_DOWN], 
-                    left=keys[pygame.K_LEFT], 
-                    right=keys[pygame.K_RIGHT])
+        if keys[pygame.K_UP]:
+            pacman.dir_x = 0
+            pacman.dir_y = -1
+        elif keys[pygame.K_DOWN]:
+            pacman.dir_x = 0
+            pacman.dir_y = 1
+        elif keys[pygame.K_LEFT]:
+            pacman.dir_x = -1
+            pacman.dir_y = 0
+        elif keys[pygame.K_RIGHT]:
+            pacman.dir_x = 1
+            pacman.dir_y = 0
+        else:
+            pacman.dir_x = 0
+            pacman.dir_y = 0
+        pacman.move(maze)
 
         draw(window, maze, pacman)
 if __name__ == "__main__":
