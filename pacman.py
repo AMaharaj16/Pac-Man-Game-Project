@@ -2,7 +2,7 @@ import pygame
 import math
 
 pygame.init()
-pygame.display.set_caption("2048")
+pygame.display.set_caption("Pac-Man Game")
 FPS = 60
 FONT = pygame.font.SysFont('comicsans', 50, bold = True)
 TILE_SIZE = 60
@@ -16,6 +16,7 @@ MAZE_COLOUR = (0,0,255)
 PACMAN_IMAGE_UNSCALED = pygame.image.load('pacman.png')
 PACMAN_IMAGE = pygame.transform.scale(PACMAN_IMAGE_UNSCALED, (TILE_SIZE-5, TILE_SIZE-5))
 PACMAN_VEL = 3
+TOLERANCE = 10
 
 class Maze:
     def __init__(self, layout):
@@ -57,33 +58,36 @@ class Pacman:
             next_y = self.y + self.dir_y * PACMAN_VEL
             tile_col = next_x // TILE_SIZE
             tile_row = math.ceil(next_y / TILE_SIZE)
+            if not maze.is_wall(tile_row, tile_col):
+                self.x = next_x
+                self.y = next_y
         elif self.dir_y == -1:
             self.direction = 'up'
             next_x = self.x + self.dir_x * PACMAN_VEL
             next_y = self.y + self.dir_y * PACMAN_VEL
             tile_col = next_x // TILE_SIZE
             tile_row = next_y // TILE_SIZE
+            if not maze.is_wall(tile_row, tile_col):
+                self.x = next_x
+                self.y = next_y
         elif self.dir_x == 1:
             self.direction = 'right'
             next_x = self.x + self.dir_x * PACMAN_VEL
             next_y = self.y + self.dir_y * PACMAN_VEL
             tile_col = math.ceil(next_x / TILE_SIZE)
             tile_row = next_y // TILE_SIZE
+            if not maze.is_wall(tile_row, tile_col):
+                self.x = next_x
+                self.y = next_y
         elif self.dir_x == -1:
             self.direction = 'left'
             next_x = self.x + self.dir_x * PACMAN_VEL
             next_y = self.y + self.dir_y * PACMAN_VEL
             tile_col = next_x // TILE_SIZE
             tile_row = next_y // TILE_SIZE
-        else:
-            next_x = self.x
-            next_y = self.y
-            tile_col = next_x // TILE_SIZE
-            tile_row = next_y // TILE_SIZE
-        
-        if not maze.is_wall(tile_row, tile_col):
-            self.x = next_x
-            self.y = next_y
+            if not maze.is_wall(tile_row, tile_col):
+                self.x = next_x
+                self.y = next_y
 
 def draw(window, maze, pacman):
     window.fill(BLACK)
@@ -131,9 +135,6 @@ def main(window):
             pacman.dir_y = 0
         elif keys[pygame.K_RIGHT]:
             pacman.dir_x = 1
-            pacman.dir_y = 0
-        else:
-            pacman.dir_x = 0
             pacman.dir_y = 0
         pacman.move(maze)
 
