@@ -54,40 +54,32 @@ class Pacman:
     def move(self, maze):
         if self.dir_y == 1:
             self.direction = 'down'
-            next_x = self.x + self.dir_x * PACMAN_VEL
-            next_y = self.y + self.dir_y * PACMAN_VEL
-            tile_col = next_x // TILE_SIZE
-            tile_row = math.ceil(next_y / TILE_SIZE)
-            if not maze.is_wall(tile_row, tile_col):
-                self.x = next_x
-                self.y = next_y
+            row = (self.y + TILE_SIZE) // TILE_SIZE
+            col_left = self.x // TILE_SIZE
+            col_right = (self.x + TILE_SIZE) // TILE_SIZE
+            if not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right):
+                self.y += PACMAN_VEL
         elif self.dir_y == -1:
             self.direction = 'up'
-            next_x = self.x + self.dir_x * PACMAN_VEL
-            next_y = self.y + self.dir_y * PACMAN_VEL
-            tile_col = next_x // TILE_SIZE
-            tile_row = next_y // TILE_SIZE
-            if not maze.is_wall(tile_row, tile_col):
-                self.x = next_x
-                self.y = next_y
+            row = self.y // TILE_SIZE
+            col_left = self.x // TILE_SIZE
+            col_right = (self.x + TILE_SIZE) // TILE_SIZE
+            if not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right):
+                self.y -= PACMAN_VEL
         elif self.dir_x == 1:
             self.direction = 'right'
-            next_x = self.x + self.dir_x * PACMAN_VEL
-            next_y = self.y + self.dir_y * PACMAN_VEL
-            tile_col = math.ceil(next_x / TILE_SIZE)
-            tile_row = next_y // TILE_SIZE
-            if not maze.is_wall(tile_row, tile_col):
-                self.x = next_x
-                self.y = next_y
+            col = (self.x + TILE_SIZE) // TILE_SIZE
+            row_top = self.y // TILE_SIZE
+            row_bottom = (self.y + TILE_SIZE) // TILE_SIZE
+            if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
+                self.x += PACMAN_VEL
         elif self.dir_x == -1:
             self.direction = 'left'
-            next_x = self.x + self.dir_x * PACMAN_VEL
-            next_y = self.y + self.dir_y * PACMAN_VEL
-            tile_col = next_x // TILE_SIZE
-            tile_row = next_y // TILE_SIZE
-            if not maze.is_wall(tile_row, tile_col):
-                self.x = next_x
-                self.y = next_y
+            col = self.x // TILE_SIZE
+            row_top = self.y // TILE_SIZE
+            row_bottom = (self.y + TILE_SIZE) // TILE_SIZE
+            if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
+                self.x -= PACMAN_VEL
 
 def draw(window, maze, pacman):
     window.fill(BLACK)
