@@ -81,6 +81,13 @@ class Pacman:
             if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
                 self.x -= PACMAN_VEL
 
+class Pellet:
+    def __init__(self, row, col):
+        self.row = row
+        self.col = col
+    def draw(self):
+        return
+    
 def draw(window, maze, pacman):
     window.fill(BLACK)
     maze.draw(window)
@@ -107,6 +114,8 @@ def main(window):
         ])
     
     pacman = Pacman(6, 6)
+
+    pellets = []
     
     while run:
         clock.tick(FPS)
