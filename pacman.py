@@ -55,29 +55,29 @@ class Pacman:
         if self.dir_y == 1:
             self.direction = 'down'
             row = (self.y + TILE_SIZE) // TILE_SIZE
-            col_left = self.x // TILE_SIZE
-            col_right = (self.x + TILE_SIZE) // TILE_SIZE
+            col_left = (self.x + TOLERANCE) // TILE_SIZE
+            col_right = (self.x + TILE_SIZE - TOLERANCE) // TILE_SIZE
             if not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right):
                 self.y += PACMAN_VEL
         elif self.dir_y == -1:
             self.direction = 'up'
             row = self.y // TILE_SIZE
-            col_left = self.x // TILE_SIZE
-            col_right = (self.x + TILE_SIZE) // TILE_SIZE
+            col_left = (self.x + TOLERANCE) // TILE_SIZE
+            col_right = (self.x + TILE_SIZE - TOLERANCE) // TILE_SIZE
             if not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right):
                 self.y -= PACMAN_VEL
         elif self.dir_x == 1:
             self.direction = 'right'
             col = (self.x + TILE_SIZE) // TILE_SIZE
-            row_top = self.y // TILE_SIZE
-            row_bottom = (self.y + TILE_SIZE) // TILE_SIZE
+            row_top = (self.y + TOLERANCE) // TILE_SIZE
+            row_bottom = (self.y + TILE_SIZE - TOLERANCE) // TILE_SIZE
             if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
                 self.x += PACMAN_VEL
         elif self.dir_x == -1:
             self.direction = 'left'
             col = self.x // TILE_SIZE
-            row_top = self.y // TILE_SIZE
-            row_bottom = (self.y + TILE_SIZE) // TILE_SIZE
+            row_top = (self.y + TOLERANCE) // TILE_SIZE
+            row_bottom = (self.y + TILE_SIZE - TOLERANCE) // TILE_SIZE
             if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
                 self.x -= PACMAN_VEL
 
