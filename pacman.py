@@ -17,6 +17,7 @@ PACMAN_IMAGE_UNSCALED = pygame.image.load('pacman.png')
 PACMAN_IMAGE = pygame.transform.scale(PACMAN_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE))
 PACMAN_VEL = 3
 TOLERANCE = 20
+PELLET_RADIUS = 3
 
 class Maze:
     def __init__(self, layout):
@@ -25,13 +26,17 @@ class Maze:
     def is_wall(self, row, col):
         return self.layout[row][col] == 1
     
-    def draw(self, window):
+    def draw(self, window, pellets):
         for r, row in enumerate(self.layout):
             for c, val in enumerate(row):
                 x = c * TILE_SIZE
                 y = r * TILE_SIZE
                 if val == 1:
                     pygame.draw.rect(window, MAZE_COLOUR, (x, y, TILE_SIZE, TILE_SIZE))
+                elif val == 0:
+                    newPellet = Pellet(r,c)
+                    pellets.append(newPellet)
+                    newPellet.draw(window)
 
 class Pacman:
     def __init__(self, row, col):
@@ -104,12 +109,17 @@ class Pellet:
     def __init__(self, row, col):
         self.row = row
         self.col = col
-    def draw(self):
-        return
+        self.y = row * TILE_SIZE + TILE_SIZE / 2
+        self.x = col * TILE_SIZE + TILE_SIZE / 2
+        self.eaten = False
+    def draw(self, window):
+        if not self.eaten:
+            pygame.draw.circle(window, (255, 255, 0), (self.x, self.y), PELLET_RADIUS)
+        
     
-def draw(window, maze, pacman):
+def draw(window, maze, pacman, pellets):
     window.fill(BLACK)
-    maze.draw(window)
+    maze.draw(window, pellets)
     pacman.draw(window)
     pygame.display.update()
 
@@ -158,6 +168,6 @@ def main(window):
             pacman.dir_y = 0
         pacman.move(maze)
 
-        draw(window, maze, pacman)
+        draw(window, maze, pacman, pellets)
 if __name__ == "__main__":
     main(WINDOW)
