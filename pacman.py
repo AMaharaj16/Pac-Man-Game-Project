@@ -14,7 +14,7 @@ WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 BLACK = (0,0,0)
 MAZE_COLOUR = (0,0,255)
 PACMAN_IMAGE_UNSCALED = pygame.image.load('pacman.png')
-PACMAN_IMAGE = pygame.transform.scale(PACMAN_IMAGE_UNSCALED, (TILE_SIZE-5, TILE_SIZE-5))
+PACMAN_IMAGE = pygame.transform.scale(PACMAN_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE))
 PACMAN_VEL = 3
 TOLERANCE = 10
 
@@ -42,6 +42,7 @@ class Pacman:
         self.direction = 'right'
         self.dir_x = 0
         self.dir_y = 0
+
     def draw(self, window):
         if self.direction == 'right':
             window.blit(PACMAN_IMAGE, (self.x, self.y))
@@ -51,6 +52,7 @@ class Pacman:
             window.blit(pygame.transform.rotate(PACMAN_IMAGE, 180), (self.x, self.y))
         elif self.direction == 'down':
             window.blit(pygame.transform.rotate(PACMAN_IMAGE, 270), (self.x, self.y))
+
     def move(self, maze):
         if self.dir_y == 1:
             self.direction = 'down'
@@ -80,6 +82,23 @@ class Pacman:
             row_bottom = (self.y + TILE_SIZE - TOLERANCE) // TILE_SIZE
             if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
                 self.x -= PACMAN_VEL
+        
+        # If moving left or right, snap to y-coord of tile.
+        if self.dir_x != 0:
+            target_y = round(self.y / TILE_SIZE) * TILE_SIZE
+            if abs(self.y - target_y) <= TOLERANCE:
+                self.y = target_y
+        
+        # If moving up or down, snap to x-coord of tile.
+        if self.dir_y != 0:
+            target_x = round(self.x / TILE_SIZE) * TILE_SIZE
+            if abs(self.x - target_x) <= TOLERANCE:
+                self.x = target_x
+        
+        self.row = self.y // TILE_SIZE
+        self.col = self.x // TILE_SIZE
+
+
 
 class Pellet:
     def __init__(self, row, col):
