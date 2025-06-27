@@ -27,6 +27,7 @@ class Maze:
         return self.layout[row][col] == 1
     
     def draw(self, window, pellets):
+        pellets = []
         for r, row in enumerate(self.layout):
             for c, val in enumerate(row):
                 x = c * TILE_SIZE
@@ -167,6 +168,14 @@ def main(window):
             pacman.dir_x = 1
             pacman.dir_y = 0
         pacman.move(maze)
+
+        for pellet in pellets:
+            if abs(pacman.x - pellet.x) < TILE_SIZE/2 and abs(pacman.y - pellet.y) < TILE_SIZE/2:
+                pellet.eaten = True
+                row = pacman.y // TILE_SIZE
+                col = pacman.x // TILE_SIZE
+                maze[row][col] = 2
+
 
         draw(window, maze, pacman, pellets)
 if __name__ == "__main__":
