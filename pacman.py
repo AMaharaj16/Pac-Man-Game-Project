@@ -26,18 +26,13 @@ class Maze:
     def is_wall(self, row, col):
         return self.layout[row][col] == 1
     
-    def draw(self, window, pellets):
-        pellets = []
+    def draw(self, window):
         for r, row in enumerate(self.layout):
             for c, val in enumerate(row):
                 x = c * TILE_SIZE
                 y = r * TILE_SIZE
                 if val == 1:
                     pygame.draw.rect(window, MAZE_COLOUR, (x, y, TILE_SIZE, TILE_SIZE))
-                elif val == 0:
-                    newPellet = Pellet(r,c)
-                    pellets.append(newPellet)
-                    newPellet.draw(window)
 
 class Pacman:
     def __init__(self, row, col):
@@ -120,9 +115,23 @@ class Pellet:
     
 def draw(window, maze, pacman, pellets):
     window.fill(BLACK)
-    maze.draw(window, pellets)
+    maze.draw(window)
+    pacman_center_x = pacman.x + TILE_SIZE / 2
+    pacman_center_y = pacman.y + TILE_SIZE / 2
+    for pellet in pellets:
+            pellet.draw(window)
+            if not pellet.eaten and abs(pacman_center_x - pellet.x) < TILE_SIZE/2 and abs(pacman_center_y - pellet.y) < TILE_SIZE/2:
+                pellet.eaten = True
     pacman.draw(window)
     pygame.display.update()
+
+def initialize_pellets(maze):
+    result = []
+    for i in range(MAZE_HEIGHT):
+        for j in range(MAZE_WIDTH):
+            if maze.layout[i][j] == 0:
+                result.append(Pellet(i,j))
+    return result
 
 def main(window):
     clock = pygame.time.Clock()
@@ -145,7 +154,7 @@ def main(window):
     
     pacman = Pacman(6, 6)
 
-    pellets = []
+    pellets = initialize_pellets(maze)
     
     while run:
         clock.tick(FPS)
@@ -154,6 +163,8 @@ def main(window):
             if event.type == pygame.QUIT:
                 run = False
                 break
+        if pellets == []:
+            run =  False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
             pacman.dir_x = 0
@@ -168,14 +179,6 @@ def main(window):
             pacman.dir_x = 1
             pacman.dir_y = 0
         pacman.move(maze)
-
-        for pellet in pellets:
-            if abs(pacman.x - pellet.x) < TILE_SIZE/2 and abs(pacman.y - pellet.y) < TILE_SIZE/2:
-                pellet.eaten = True
-                row = pacman.y // TILE_SIZE
-                col = pacman.x // TILE_SIZE
-                maze[row][col] = 2
-
 
         draw(window, maze, pacman, pellets)
 if __name__ == "__main__":
