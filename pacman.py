@@ -163,8 +163,6 @@ def main(window):
             if event.type == pygame.QUIT:
                 run = False
                 break
-        if pellets == []:
-            run =  False
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
             pacman.dir_x = 0
@@ -179,6 +177,10 @@ def main(window):
             pacman.dir_x = 1
             pacman.dir_y = 0
         pacman.move(maze)
+        run = False
+        for pellet in pellets:
+            if pellet.eaten == False:
+                run = True
 
         draw(window, maze, pacman, pellets)
 if __name__ == "__main__":
