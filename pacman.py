@@ -159,6 +159,10 @@ def main(window):
     while run:
         clock.tick(FPS)
 
+        run = False
+        for pellet in pellets:
+            if pellet.eaten == False:
+                run = True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -176,11 +180,26 @@ def main(window):
         elif keys[pygame.K_RIGHT]:
             pacman.dir_x = 1
             pacman.dir_y = 0
-        pacman.move(maze)
-        run = False
-        for pellet in pellets:
-            if pellet.eaten == False:
-                run = True
+
+        try:
+            pacman.move(maze)
+        except IndexError:
+            if pacman.dir_x == 1:
+                pacman.x += PACMAN_VEL
+                if pacman.x >= WIDTH:
+                    pacman.x = -TILE_SIZE
+            elif pacman.dir_x == -1:
+                pacman.x -= PACMAN_VEL
+                if pacman.x <= 0:
+                    pacman.x = WIDTH - TILE_SIZE
+            if pacman.dir_y == 1:
+                pacman.y += PACMAN_VEL
+                if pacman.y >= HEIGHT:
+                    pacman.y = -TILE_SIZE
+            elif pacman.dir_y == -1:
+                pacman.y -= PACMAN_VEL
+                if pacman.y <= 0:
+                    pacman.y = WIDTH - TILE_SIZE
 
         draw(window, maze, pacman, pellets)
 if __name__ == "__main__":
