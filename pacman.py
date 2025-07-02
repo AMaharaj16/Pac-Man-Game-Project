@@ -188,18 +188,16 @@ def main(window):
                 pacman.x += PACMAN_VEL
                 if pacman.x >= WIDTH:
                     pacman.x = -TILE_SIZE
-            elif pacman.dir_x == -1:
-                pacman.x -= PACMAN_VEL
-                if pacman.x <= 0:
-                    pacman.x = WIDTH - TILE_SIZE
             if pacman.dir_y == 1:
                 pacman.y += PACMAN_VEL
                 if pacman.y >= HEIGHT:
                     pacman.y = -TILE_SIZE
-            elif pacman.dir_y == -1:
-                pacman.y -= PACMAN_VEL
-                if pacman.y <= 0:
-                    pacman.y = WIDTH - TILE_SIZE
+        
+        
+        if pacman.dir_x == -1 and pacman.x <= 0:
+            pacman.x = WIDTH - 1
+        if pacman.dir_y == -1 and pacman.y <= 0:
+            pacman.y = WIDTH - 1
 
         draw(window, maze, pacman, pellets)
 if __name__ == "__main__":
