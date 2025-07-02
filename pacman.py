@@ -194,9 +194,9 @@ def main(window):
                     pacman.y = -TILE_SIZE
         
         
-        if pacman.dir_x == -1 and pacman.x <= 0:
+        if pacman.dir_x == -1 and pacman.x <= -TILE_SIZE:
             pacman.x = WIDTH - 1
-        if pacman.dir_y == -1 and pacman.y <= 0:
+        if pacman.dir_y == -1 and pacman.y <= -TILE_SIZE:
             pacman.y = WIDTH - 1
 
         draw(window, maze, pacman, pellets)
