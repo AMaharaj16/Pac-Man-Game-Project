@@ -1,5 +1,5 @@
 import pygame
-import math
+from maze import Maze
 
 pygame.init()
 pygame.display.set_caption("Pac-Man Game")
@@ -19,20 +19,6 @@ PACMAN_VEL = 3
 TOLERANCE = 20
 PELLET_RADIUS = 3
 
-class Maze:
-    def __init__(self, layout):
-        self.layout = layout
-    
-    def is_wall(self, row, col):
-        return self.layout[row][col] == 1
-    
-    def draw(self, window):
-        for r, row in enumerate(self.layout):
-            for c, val in enumerate(row):
-                x = c * TILE_SIZE
-                y = r * TILE_SIZE
-                if val == 1:
-                    pygame.draw.rect(window, MAZE_COLOUR, (x, y, TILE_SIZE, TILE_SIZE))
 
 class Pacman:
     def __init__(self, row, col):
