@@ -6,7 +6,6 @@ GHOST_IMAGE_UNSCALED = pygame.image.load('pacman_ghost.png')
 GHOST_IMAGE = pygame.transform.scale(GHOST_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE))
 
 class Ghost:
-    #Test
     def __init__(self, row, col):
         self.row = row
         self.col = col
