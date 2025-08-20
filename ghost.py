@@ -14,11 +14,14 @@ class Ghost:
         self.dir_x = 1
         self.dir_y = 0
         self.decisionNeeded = False
+        self.lastTile = None
 
     def draw(self, window):
         window.blit(GHOST_IMAGE, (self.x, self.y))
     
     def move(self, pacman, maze):
+        
+        prevTile = [self.col, self.row]
         self.look_around(maze)
         
         if self.decisionNeeded:
@@ -31,6 +34,11 @@ class Ghost:
     
         self.row = self.y // TILE_SIZE
         self.col = self.x // TILE_SIZE
+
+        newTile = [self.col, self.row]
+        
+        if newTile != prevTile:
+            self.lastTIle = prevTile
     
     def look_around(self, maze):
         if self.dir_x != 0:
@@ -46,23 +54,23 @@ class Ghost:
     def make_decision(self, pacman, maze):
         bestRoute = ""
         shortestDist = 10000
-        if not maze.is_wall(self.row + 1, self.col): # Tile Down
+        if not maze.is_wall(self.row + 1, self.col) and self.lastTile != [self.col + 1, self.row]: # Tile Down
             shortestDist = abs((self.row + 1) - pacman.row) + abs(self.col - pacman.col)
             bestRoute = 'D'
         
-        if not maze.is_wall(self.row - 1, self.col): # Tile Up
+        if not maze.is_wall(self.row - 1, self.col) and self.lastTile != [self.col - 1, self.row]: # Tile Up
             dist = abs((self.row - 1) - pacman.row) + abs(self.col - pacman.col)
             if dist < shortestDist:
                 shortestDist = dist
                 bestRoute = 'U'
 
-        if not maze.is_wall(self.row, self.col + 1): # Tile Right
+        if not maze.is_wall(self.row, self.col + 1) and self.lastTile != [self.col, self.row + 1]: # Tile Right
             dist = abs(self.row - pacman.row) + abs((self.col + 1) - pacman.col)
             if dist < shortestDist:
                 shortestDist = dist
                 bestRoute = 'R'
 
-        if not maze.is_wall(self.row, self.col - 1): # Tile Left
+        if not maze.is_wall(self.row, self.col - 1) and self.lastTile != [self.col, self.row - 1]: # Tile Left
             dist = abs(self.row - pacman.row) + abs((self.col - 1) - pacman.col)
             if dist < shortestDist:
                 shortestDist = dist
