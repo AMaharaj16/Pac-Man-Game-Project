@@ -133,7 +133,7 @@ def main(window):
 
     pellets = initialize_pellets(maze)
 
-    ghost = Ghost(0,0)
+    ghost = Ghost(1,1)
     
     while run:
         clock.tick(FPS)
@@ -177,6 +177,11 @@ def main(window):
             pacman.x = WIDTH - 1
         if pacman.dir_y == -1 and pacman.y <= -TILE_SIZE:
             pacman.y = WIDTH - 1
+
+        ghost.move(pacman, maze)
+            
+        if abs(ghost.x - pacman.x) < 10 and abs(ghost.y - pacman.y) < 10:
+            run = False
 
         draw(window, maze, pacman, pellets, ghost)
 if __name__ == "__main__":
