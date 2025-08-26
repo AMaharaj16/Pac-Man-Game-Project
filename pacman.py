@@ -89,7 +89,7 @@ class Pacman:
 
 
 
-def draw(window, maze, pacman, pellets, ghost):
+def draw(window, maze, pacman, pellets, ghosts):
     window.fill(BLACK)
     maze.draw(window)
     pacman_center_x = pacman.x + TILE_SIZE / 2
@@ -99,7 +99,8 @@ def draw(window, maze, pacman, pellets, ghost):
             if not pellet.eaten and abs(pacman_center_x - pellet.x) < TILE_SIZE/2 and abs(pacman_center_y - pellet.y) < TILE_SIZE/2:
                 pellet.eaten = True
     pacman.draw(window)
-    ghost.draw(window)
+    for ghost in ghosts:
+        ghost.draw(window)
     pygame.display.update()
 
 def initialize_pellets(maze):
@@ -133,7 +134,7 @@ def main(window):
 
     pellets = initialize_pellets(maze)
 
-    ghost = Ghost(1,1, True)
+    ghosts = [Ghost(1, 1, True, 0), Ghost(1, 11, True, 250), Ghost(11, 1, True, 500), Ghost(11, 11, True, 750)]
     
     while run:
         clock.tick(FPS)
@@ -178,12 +179,12 @@ def main(window):
         if pacman.dir_y == -1 and pacman.y <= -TILE_SIZE:
             pacman.y = WIDTH - 1
 
-        
-        ghost.move(pacman, maze)
+        for ghost in ghosts:
+            ghost.move(pacman, maze)
             
-        if abs(ghost.x - pacman.x) < 10 and abs(ghost.y - pacman.y) < 10:
-            run = False
+            if abs(ghost.x - pacman.x) < 10 and abs(ghost.y - pacman.y) < 10:
+                run = False
 
-        draw(window, maze, pacman, pellets, ghost)
+        draw(window, maze, pacman, pellets, ghosts)
 if __name__ == "__main__":
     main(WINDOW)
