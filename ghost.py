@@ -1,7 +1,7 @@
 import pygame
 
 TILE_SIZE = 60
-GHOST_VEL = 2
+GHOST_VEL = 3
 CHASE_TIME = 600
 GHOST_IMAGE_UNSCALED = pygame.image.load('pacman_ghost.png')
 GHOST_IMAGE = pygame.transform.scale(GHOST_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE))
