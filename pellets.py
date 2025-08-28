@@ -1,6 +1,6 @@
 import pygame
 PELLET_RADIUS = 3
-TILE_SIZE = 60
+TILE_SIZE = 30
 
 class Pellet:
     def __init__(self, row, col):

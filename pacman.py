@@ -7,9 +7,9 @@ pygame.init()
 pygame.display.set_caption("Pac-Man Game")
 FPS = 60
 FONT = pygame.font.SysFont('comicsans', 50, bold = True)
-TILE_SIZE = 60
-MAZE_HEIGHT = 13
-MAZE_WIDTH = 13
+TILE_SIZE = 30
+MAZE_HEIGHT = 21
+MAZE_WIDTH = 21
 HEIGHT = MAZE_HEIGHT * TILE_SIZE
 WIDTH = MAZE_WIDTH * TILE_SIZE
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -17,7 +17,7 @@ BLACK = (0,0,0)
 MAZE_COLOUR = (0,0,255)
 PACMAN_IMAGE_UNSCALED = pygame.image.load('pacman.png')
 PACMAN_IMAGE = pygame.transform.scale(PACMAN_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE))
-PACMAN_VEL = 3
+PACMAN_VEL = 2
 TOLERANCE = 25
 PELLET_RADIUS = 3
 
@@ -114,6 +114,7 @@ def initialize_pellets(maze):
 def main(window):
     clock = pygame.time.Clock()
     run = True
+    '''
     maze = Maze([
         [1,1,1,1,0,1,1,1,0,1,1,1,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -129,12 +130,35 @@ def main(window):
         [1,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,1,1,1,0,1,1,1,0,1,1,1,1]
         ])
+    '''
+
+    maze = Maze([[1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1],
+                 [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+                 [1,0,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,0,1],
+                 [1,0,1,1,1,0,1,0,0,0,1,0,0,0,1,0,1,1,1,0,1],
+                 [1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,0,1],
+                 [1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1],
+                 [1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1],
+                 [0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0],
+                 [1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0,1],
+                 [1,0,1,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,1,0,1],
+                 [1,0,1,0,1,0,1,0,1,0,2,0,1,0,1,0,1,0,1,0,1],
+                 [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
+                 [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],
+                 [0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0],
+                 [1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1],
+                 [1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+                 [1,0,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,0,1],
+                 [1,0,1,1,1,0,1,0,0,0,1,0,0,0,1,0,1,1,1,0,1],
+                 [1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0,1],
+                 [1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1],
+                 [1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1]])
     
-    pacman = Pacman(6, 6)
+    pacman = Pacman(10, 10)
 
     pellets = initialize_pellets(maze)
 
-    ghosts = [Ghost(1, 1, True, 0), Ghost(1, 11, True, 250), Ghost(11, 1, True, 500), Ghost(11, 11, True, 750)]
+    ghosts = [Ghost(1, 1, True, 0), Ghost(1, 19, True, 250), Ghost(19, 1, True, 500), Ghost(19, 19, True, 750)]
     
     while run:
         clock.tick(FPS)

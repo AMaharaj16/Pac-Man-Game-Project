@@ -1,8 +1,8 @@
 import pygame
 
-TILE_SIZE = 60
-GHOST_VEL = 3
-CHASE_TIME = 600
+TILE_SIZE = 30
+GHOST_VEL = 2
+CHASE_TIME = 720  # Chase for 6 seconds
 GHOST_IMAGE_UNSCALED = pygame.image.load('pacman_ghost.png')
 GHOST_IMAGE = pygame.transform.scale(GHOST_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE))
 
@@ -58,7 +58,7 @@ class Ghost:
     def make_decision_chase(self, pacman, maze):
         bestRoute = ""
         shortestDist = 10000
-        if not maze.is_wall(self.row + 1, self.col) and self.lastTile != [self.row + 1, self.col] and self.row < 11: # Tile Down
+        if not maze.is_wall(self.row + 1, self.col) and self.lastTile != [self.row + 1, self.col] and self.row < 19: # Tile Down
             shortestDist = abs((self.row + 1) - pacman.row) + abs(self.col - pacman.col)
             bestRoute = 'D'
         
@@ -68,7 +68,7 @@ class Ghost:
                 shortestDist = dist
                 bestRoute = 'U'
 
-        if not maze.is_wall(self.row, self.col + 1) and self.lastTile != [self.row, self.col + 1] and self.col < 11: # Tile Right
+        if not maze.is_wall(self.row, self.col + 1) and self.lastTile != [self.row, self.col + 1] and self.col < 19: # Tile Right
             dist = abs(self.row - pacman.row) + abs((self.col + 1) - pacman.col)
             if dist < shortestDist:
                 shortestDist = dist
@@ -124,7 +124,7 @@ class Ghost:
     def make_decision_scatter(self, maze):
         bestRoute = ""
         shortestDist = 10000
-        if not maze.is_wall(self.row + 1, self.col) and self.lastTile != [self.row + 1, self.col] and self.row < 11: # Tile Down
+        if not maze.is_wall(self.row + 1, self.col) and self.lastTile != [self.row + 1, self.col] and self.row < 19: # Tile Down
             shortestDist = abs((self.row + 1) - self.spawnRow) + abs(self.col - self.spawnCol)
             bestRoute = 'D'
         
@@ -134,7 +134,7 @@ class Ghost:
                 shortestDist = dist
                 bestRoute = 'U'
 
-        if not maze.is_wall(self.row, self.col + 1) and self.lastTile != [self.row, self.col + 1] and self.col < 11: # Tile Right
+        if not maze.is_wall(self.row, self.col + 1) and self.lastTile != [self.row, self.col + 1] and self.col < 19: # Tile Right
             dist = abs(self.row - self.spawnRow) + abs((self.col + 1) - self.spawnCol)
             if dist < shortestDist:
                 shortestDist = dist

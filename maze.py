@@ -1,6 +1,6 @@
 import pygame
 
-TILE_SIZE = 60
+TILE_SIZE = 30
 MAZE_COLOUR = (0,0,255)
 
 class Maze:
