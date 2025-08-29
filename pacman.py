@@ -137,7 +137,7 @@ def main(window):
                  [1,0,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,0,1],
                  [1,0,1,1,1,0,1,0,0,0,1,0,0,0,1,0,1,1,1,0,1],
                  [1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,0,1],
-                 [1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1],
+                 [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1],
                  [1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1],
                  [0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0],
                  [1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0,1],
@@ -158,11 +158,7 @@ def main(window):
 
     pellets = initialize_pellets(maze)
 
-    ghosts = [Ghost(1, 1, True, 0), Ghost(1, 19, True, 250), Ghost(19, 1, True, 500), Ghost(19, 19, True, 750),
-              Ghost(1, 11, True, 0), Ghost(11,1, True, 0), Ghost(11,19, True, 0), Ghost(19,11, True, 0),
-              Ghost(1, 16, True, 0), Ghost(16,1, True, 0), Ghost(16,19, True, 0), Ghost(19,16, True, 0),
-              Ghost(1, 4, True, 0), Ghost(4,1, True, 0), Ghost(4,19, True, 0), Ghost(19,4, True, 0),
-              Ghost(1, 8, True, 0), Ghost(8,1, True, 0), Ghost(8,19, True, 0), Ghost(19,8, True, 0),]
+    ghosts = [Ghost(1, 1, True, 0), Ghost(1, 19, True, 75), Ghost(19, 1, True, 150), Ghost(19, 19, True, 225)]
     
     while run:
         clock.tick(FPS)

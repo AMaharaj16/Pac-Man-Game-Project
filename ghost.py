@@ -1,8 +1,7 @@
 import pygame
 
 TILE_SIZE = 30
-GHOST_VEL = 1
-CHASE_TIME = 600000  # Chase for 6 seconds
+GHOST_VEL = 2
 GHOST_IMAGE_UNSCALED = pygame.image.load('pacman_ghost.png')
 GHOST_IMAGE = pygame.transform.scale(GHOST_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE))
 
@@ -20,6 +19,7 @@ class Ghost:
         self.lastTile = None
         self.chase = chase
         self.time = time
+        self.chaseTime = 300 # Starts chasing time at 5 seconds
 
     def draw(self, window):
         window.blit(GHOST_IMAGE, (self.x, self.y))
@@ -52,7 +52,7 @@ class Ghost:
         if newTile != prevTile:
             self.lastTile = prevTile
         
-        if self.time > CHASE_TIME:
+        if self.time > self.chaseTime:
             self.chase = False
     
     def make_decision_chase(self, pacman, maze):
@@ -120,6 +120,7 @@ class Ghost:
         
         if self.row == self.spawnRow and self.col == self.spawnCol:
             self.chase = True
+            self.chaseTime += 120 # Chasing again, add 2 seconds to chaseTime
         
     def make_decision_scatter(self, maze):
         bestRoute = ""
