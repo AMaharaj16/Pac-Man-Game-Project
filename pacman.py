@@ -18,7 +18,7 @@ MAZE_COLOUR = (0,0,255)
 PACMAN_IMAGE_UNSCALED = pygame.image.load('pacman.png')
 PACMAN_IMAGE = pygame.transform.scale(PACMAN_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE))
 PACMAN_VEL = 2
-TOLERANCE = 25
+TOLERANCE = 29
 PELLET_RADIUS = 3
 
 
@@ -158,7 +158,11 @@ def main(window):
 
     pellets = initialize_pellets(maze)
 
-    ghosts = [Ghost(1, 1, True, 0), Ghost(1, 19, True, 250), Ghost(19, 1, True, 500), Ghost(19, 19, True, 750)]
+    ghosts = [Ghost(1, 1, True, 0), Ghost(1, 19, True, 250), Ghost(19, 1, True, 500), Ghost(19, 19, True, 750),
+              Ghost(1, 11, True, 0), Ghost(11,1, True, 0), Ghost(11,19, True, 0), Ghost(19,11, True, 0),
+              Ghost(1, 16, True, 0), Ghost(16,1, True, 0), Ghost(16,19, True, 0), Ghost(19,16, True, 0),
+              Ghost(1, 4, True, 0), Ghost(4,1, True, 0), Ghost(4,19, True, 0), Ghost(19,4, True, 0),
+              Ghost(1, 8, True, 0), Ghost(8,1, True, 0), Ghost(8,19, True, 0), Ghost(19,8, True, 0),]
     
     while run:
         clock.tick(FPS)
