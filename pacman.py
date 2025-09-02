@@ -83,9 +83,6 @@ class Pacman:
     def can_move(self, maze, xdir, ydir):
         # Return whether pacman can move in the given direction
 
-        if xdir == 0 and ydir == 0:
-            return False
-        
         next_x = self.x + xdir * PACMAN_VEL
         next_y = self.y + ydir * PACMAN_VEL
 
