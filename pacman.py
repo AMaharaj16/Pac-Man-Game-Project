@@ -31,6 +31,8 @@ class Pacman:
         self.direction = 'right'
         self.dir_x = 0
         self.dir_y = 0
+        self.next_dir_x = 0
+        self.next_dir_y = 0
 
     def draw(self, window):
         if self.direction == 'right':
@@ -55,46 +57,45 @@ class Pacman:
             if abs(self.x - target_x) <= TOLERANCE:
                 self.x = target_x
 
-        next_x = self.x
-        next_y = self.y
-        can_move = False
-
         if self.dir_y == 1:
             row = (self.y + TILE_SIZE) // TILE_SIZE
             col_left = (self.x + TOLERANCE) // TILE_SIZE
             col_right = (self.x + TILE_SIZE - TOLERANCE) // TILE_SIZE
             if not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right):
                 self.direction = 'down'
-                next_y += PACMAN_VEL
-                can_move = True
+                self.dir_x = self.next_dir_x
+                self.dir_y = self.next_dir_y
+                self.y += PACMAN_VEL
+
         elif self.dir_y == -1:
             row = self.y // TILE_SIZE
             col_left = (self.x + TOLERANCE) // TILE_SIZE
             col_right = (self.x + TILE_SIZE - TOLERANCE) // TILE_SIZE
             if not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right):
                 self.direction = 'up'
-                next_y -= PACMAN_VEL
-                can_move = True
+                self.dir_x = self.next_dir_x
+                self.dir_y = self.next_dir_y
+                self.y -= PACMAN_VEL
+
         elif self.dir_x == 1:
             col = (self.x + TILE_SIZE) // TILE_SIZE
             row_top = (self.y + TOLERANCE) // TILE_SIZE
             row_bottom = (self.y + TILE_SIZE - TOLERANCE) // TILE_SIZE
             if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
                 self.direction = 'right'
-                next_x += PACMAN_VEL
-                can_move = True
+                self.dir_x = self.next_dir_x
+                self.dir_y = self.next_dir_y
+                self.x += PACMAN_VEL
+
         elif self.dir_x == -1:
             col = self.x // TILE_SIZE
             row_top = (self.y + TOLERANCE) // TILE_SIZE
             row_bottom = (self.y + TILE_SIZE - TOLERANCE) // TILE_SIZE
             if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
                 self.direction = 'left'
-                next_x -= PACMAN_VEL
-                can_move = True
-        
-        if can_move:
-            self.x = next_x
-            self.y = next_y
+                self.dir_x = self.next_dir_x
+                self.dir_y = self.next_dir_y
+                self.x -= PACMAN_VEL
         
         self.row = self.y // TILE_SIZE
         self.col = self.x // TILE_SIZE
@@ -168,17 +169,17 @@ def main(window):
                 break
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
-            pacman.dir_x = 0
-            pacman.dir_y = -1
+            pacman.next_dir_x = 0
+            pacman.next_dir_y = -1
         elif keys[pygame.K_DOWN]:
-            pacman.dir_x = 0
-            pacman.dir_y = 1
+            pacman.next_dir_x = 0
+            pacman.next_dir_y = 1
         elif keys[pygame.K_LEFT]:
-            pacman.dir_x = -1
-            pacman.dir_y = 0
+            pacman.next_dir_x = -1
+            pacman.next_dir_y = 0
         elif keys[pygame.K_RIGHT]:
-            pacman.dir_x = 1
-            pacman.dir_y = 0
+            pacman.next_dir_x = 1
+            pacman.next_dir_y = 0
 
         try:
             pacman.move(maze)
