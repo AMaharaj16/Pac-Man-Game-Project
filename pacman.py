@@ -100,6 +100,41 @@ class Pacman:
         self.row = self.y // TILE_SIZE
         self.col = self.x // TILE_SIZE
 
+    def can_move(self, maze, xdir, ydir):
+        # Return whether pacman can move in the given direction
+        
+        next_x = next_x + xdir * PACMAN_VEL
+        next_y = self.y + ydir * PACMAN_VEL
+
+        if ydir == 1:
+            row = (next_y + TILE_SIZE) // TILE_SIZE
+            col_left = (next_x + TOLERANCE) // TILE_SIZE
+            col_right = (next_x + TILE_SIZE - TOLERANCE) // TILE_SIZE
+            if not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right):
+                return True
+
+        elif ydir == -1:
+            row = next_y // TILE_SIZE
+            col_left = (next_x + TOLERANCE) // TILE_SIZE
+            col_right = (next_x + TILE_SIZE - TOLERANCE) // TILE_SIZE
+            if not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right):
+                return True
+
+        elif xdir == 1:
+            col = (next_x + TILE_SIZE) // TILE_SIZE
+            row_top = (next_y + TOLERANCE) // TILE_SIZE
+            row_bottom = (next_y + TILE_SIZE - TOLERANCE) // TILE_SIZE
+            if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
+                return True
+
+        elif xdir == -1:
+            col = next_x // TILE_SIZE
+            row_top = (next_y + TOLERANCE) // TILE_SIZE
+            row_bottom = (next_y + TILE_SIZE - TOLERANCE) // TILE_SIZE
+            if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
+                return True
+        
+        return False
 
 
 def draw(window, maze, pacman, pellets, ghosts):
