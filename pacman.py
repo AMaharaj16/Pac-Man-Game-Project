@@ -93,29 +93,25 @@ class Pacman:
             row = (next_y + TILE_SIZE) // TILE_SIZE
             col_left = (next_x + TOLERANCE) // TILE_SIZE
             col_right = (next_x + TILE_SIZE - TOLERANCE) // TILE_SIZE
-            if not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right):
-                return True
+            return not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right)
 
         elif ydir == -1:
             row = next_y // TILE_SIZE
             col_left = (next_x + TOLERANCE) // TILE_SIZE
             col_right = (next_x + TILE_SIZE - TOLERANCE) // TILE_SIZE
-            if not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right):
-                return True
+            return not maze.is_wall(row, col_left) and not maze.is_wall(row, col_right)
 
         elif xdir == 1:
             col = (next_x + TILE_SIZE) // TILE_SIZE
             row_top = (next_y + TOLERANCE) // TILE_SIZE
             row_bottom = (next_y + TILE_SIZE - TOLERANCE) // TILE_SIZE
-            if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
-                return True
+            return not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col)
 
         elif xdir == -1:
             col = next_x // TILE_SIZE
             row_top = (next_y + TOLERANCE) // TILE_SIZE
             row_bottom = (next_y + TILE_SIZE - TOLERANCE) // TILE_SIZE
-            if not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col):
-                return True
+            return not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col)
         
         return False
 
