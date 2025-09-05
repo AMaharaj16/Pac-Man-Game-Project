@@ -191,7 +191,11 @@ class Ghost:
 
             if (r,c) == (pacman.row, pacman.col):
                 path = []
-                # TODO
+                while (r,c) != start:
+                    path.append(r,c) # Starting from Pac-Man's location, return tiles all the way to start
+                    r,c = prevNode[(r,c)]
+                path.append(start)
+                return path[::1] # Reverse path so it gives path to Pac-Man, not from
 
             for xdir, ydir in [(1,0), (0,1), (-1,0), (0,-1)]: # Check all 4 directions
                 rNext = r + ydir
