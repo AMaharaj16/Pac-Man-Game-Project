@@ -1,4 +1,5 @@
 import pygame
+from collections import deque
 
 TILE_SIZE = 30
 GHOST_VEL = 2
@@ -175,3 +176,35 @@ class Ghost:
             self.x = self.col * TILE_SIZE
             if self.row == self.y / TILE_SIZE:
                 self.decisionNeeded = True
+    
+    # NEED TO FINISH
+    def bfs(self, maze, pacman):
+        rows = len(maze)
+        cols = len(maze[0])
+        start = (self.row, self.col)
+        prevNode = dict() # (ParentRow, ParentCol): (ChildRow, ChildCol)
+
+        queue = deque([start])
+
+        while queue:
+            r, c = queue.popleft() # Current position in tree
+
+            if (r,c) == (pacman.row, pacman.col):
+                path = []
+                # TODO
+
+            for xdir, ydir in [(1,0), (0,1), (-1,0), (0,-1)]: # Check all 4 directions
+                rNext = r + ydir
+                cNext = c + xdir
+
+                if maze[rNext][cNext] == 0:
+                    prevNode[(rNext, cNext)] = (r, c)
+                    queue.append([rNext,cNext])
+
+
+        return []
+
+
+
+
+
