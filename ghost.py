@@ -73,7 +73,7 @@ class Ghost:
         elif nextCol > self.col:
             self.dir_x = 1
             self.dir_y = 0
-        elif nextCol < self.col:
+        else:
             self.dir_x = -1
             self.dir_y = 0
         
