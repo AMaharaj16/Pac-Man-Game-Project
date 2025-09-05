@@ -57,43 +57,26 @@ class Ghost:
             self.chase = False
     
     def make_decision_chase(self, pacman, maze):
-        bestRoute = ""
-        shortestDist = 10000
-        if not maze.is_wall(self.row + 1, self.col) and self.lastTile != [self.row + 1, self.col] and self.row < 19: # Tile Down
-            shortestDist = abs((self.row + 1) - pacman.row) + abs(self.col - pacman.col)
-            bestRoute = 'D'
-        
-        if not maze.is_wall(self.row - 1, self.col) and self.lastTile != [self.row - 1, self.col] and self.row > 1: # Tile Up
-            dist = abs((self.row - 1) - pacman.row) + abs(self.col - pacman.col)
-            if dist < shortestDist:
-                shortestDist = dist
-                bestRoute = 'U'
+        path = self.bfs(maze, pacman)
 
-        if not maze.is_wall(self.row, self.col + 1) and self.lastTile != [self.row, self.col + 1] and self.col < 19: # Tile Right
-            dist = abs(self.row - pacman.row) + abs((self.col + 1) - pacman.col)
-            if dist < shortestDist:
-                shortestDist = dist
-                bestRoute = 'R'
+        if len(path) < 2:
+            return  
 
-        if not maze.is_wall(self.row, self.col - 1) and self.lastTile != [self.row, self.col - 1] and self.col > 1: # Tile Left
-            dist = abs(self.row - pacman.row) + abs((self.col - 1) - pacman.col)
-            if dist < shortestDist:
-                shortestDist = dist
-                bestRoute = 'L'
-        
-        if bestRoute == 'D':
+        nextRow, nextCol = path[1]
+
+        if nextRow > self.row:
             self.dir_x = 0
             self.dir_y = 1
-        elif bestRoute == 'U':
+        elif nextRow < self.row:
             self.dir_x = 0
             self.dir_y = -1
-        elif bestRoute == 'R':
+        elif nextCol > self.col:
             self.dir_x = 1
             self.dir_y = 0
-        elif bestRoute == 'L':
+        elif nextCol < self.col:
             self.dir_x = -1
             self.dir_y = 0
-
+        
         self.decisionNeeded = False
 
 
@@ -178,8 +161,8 @@ class Ghost:
                 self.decisionNeeded = True
     
     def bfs(self, maze, pacman):
-        rows = len(maze)
-        cols = len(maze[0])
+        rows = len(maze.layout)
+        cols = len(maze.layout[0])
         start = (self.row, self.col)
         prevNode = dict() # (ChildRow, ChildCol): (ParentRow, ParentCol)
         visited = [start]
@@ -201,7 +184,7 @@ class Ghost:
                 rNext = r + ydir
                 cNext = c + xdir
 
-                if 0 <= rNext < rows and 0 <= cNext < cols and maze[rNext][cNext] == 0 and (rNext, cNext) not in visited:
+                if 0 <= rNext < rows and 0 <= cNext < cols and maze.layout[rNext][cNext] == 0 and (rNext, cNext) not in visited:
                     prevNode[(rNext, cNext)] = (r, c)
                     queue.append((rNext,cNext))
                     visited.append((rNext,cNext))
