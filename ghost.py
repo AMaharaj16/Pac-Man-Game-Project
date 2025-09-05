@@ -177,12 +177,12 @@ class Ghost:
             if self.row == self.y / TILE_SIZE:
                 self.decisionNeeded = True
     
-    # NEED TO FINISH
     def bfs(self, maze, pacman):
         rows = len(maze)
         cols = len(maze[0])
         start = (self.row, self.col)
-        prevNode = dict() # (ParentRow, ParentCol): (ChildRow, ChildCol)
+        prevNode = dict() # (ChildRow, ChildCol): (ParentRow, ParentCol)
+        visited = [start]
 
         queue = deque([start])
 
@@ -192,20 +192,19 @@ class Ghost:
             if (r,c) == (pacman.row, pacman.col):
                 path = []
                 while (r,c) != start:
-                    path.append(r,c) # Starting from Pac-Man's location, return tiles all the way to start
+                    path.append((r,c)) # Starting from Pac-Man's location, return tiles all the way to start
                     r,c = prevNode[(r,c)]
                 path.append(start)
-                return path[::1] # Reverse path so it gives path to Pac-Man, not from
+                return path[::-1] # Reverse path so it gives path to Pac-Man, not from
 
             for xdir, ydir in [(1,0), (0,1), (-1,0), (0,-1)]: # Check all 4 directions
                 rNext = r + ydir
                 cNext = c + xdir
 
-                if maze[rNext][cNext] == 0:
+                if 0 <= rNext < rows and 0 <= cNext < cols and maze[rNext][cNext] == 0 and (rNext, cNext) not in visited:
                     prevNode[(rNext, cNext)] = (r, c)
-                    queue.append([rNext,cNext])
-
-
+                    queue.append((rNext,cNext))
+                    visited.append((rNext,cNext))
         return []
 
 
