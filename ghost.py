@@ -17,7 +17,7 @@ class Ghost:
         self.dir_x = 0
         self.dir_y = 0
         self.decisionNeeded = False
-        self.lastTile = None
+        self.lastTile = [row, col]
         self.chase = chase
         self.time = time
         self.chaseTime = 300 # Starts chasing time at 5 seconds
@@ -165,7 +165,7 @@ class Ghost:
         cols = len(maze.layout[0])
         start = (self.row, self.col)
         prevNode = dict() # (ChildRow, ChildCol): (ParentRow, ParentCol)
-        visited = [start]
+        visited = [start, tuple(self.lastTile)]
 
         queue = deque([start])
 
