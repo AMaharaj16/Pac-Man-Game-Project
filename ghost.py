@@ -7,15 +7,15 @@ GHOST_IMAGE_UNSCALED = pygame.image.load('pacman_ghost.png')
 GHOST_IMAGE = pygame.transform.scale(GHOST_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE))
 
 class Ghost:
-    def __init__(self, row, col, chase, time):
+    def __init__(self, row, col, dir_x, dir_y, chase, time):
         self.row = row
         self.col = col
         self.spawnRow = row
         self.spawnCol = col
         self.x = col * TILE_SIZE
         self.y = row * TILE_SIZE
-        self.dir_x = 0
-        self.dir_y = 0
+        self.dir_x = dir_x
+        self.dir_y = dir_y
         self.decisionNeeded = False
         self.lastTile = [row, col]
         self.chase = chase
@@ -64,16 +64,16 @@ class Ghost:
 
         nextRow, nextCol = path[1]
 
-        if nextRow > self.row:
+        if nextRow > self.row and not maze.is_wall(nextRow, self.col):
             self.dir_x = 0
             self.dir_y = 1
-        elif nextRow < self.row:
+        elif nextRow < self.row and not maze.is_wall(nextRow, self.col):
             self.dir_x = 0
             self.dir_y = -1
-        elif nextCol > self.col:
+        elif nextCol > self.col and not maze.is_wall(self.row, nextCol):
             self.dir_x = 1
             self.dir_y = 0
-        else:
+        elif not maze.is_wall(self.row, nextCol):
             self.dir_x = -1
             self.dir_y = 0
         
