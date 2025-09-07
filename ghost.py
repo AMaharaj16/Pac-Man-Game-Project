@@ -41,13 +41,14 @@ class Ghost:
                 self.chaseTime += 120 # Chasing again, add 2 seconds to chaseTime
         
     def move_anywhere(self, maze):
-        self.lastTile == [self.row, self.col]
         for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
             nr, nc = self.row + dr, self.col + dc
-            if not maze.is_wall(nr, nc):
+            if not maze.is_wall(nr, nc) and [nr, nc] != self.lastTile and 0 < nr < 20 and 0 < nc < 20:
                 self.dir_x, self.dir_y = dc, dr
                 self.decisionNeeded = False
                 return
+        
+        self.lastTile = [self.row, self.col]
     
     def move_towards(self, maze, targetRow, targetCol):
         prevTile = [self.row, self.col]
@@ -61,28 +62,28 @@ class Ghost:
                 if not maze.is_wall(self.row, nextCol):
                     self.x += GHOST_VEL * self.dir_x
                 else:
-                    self.dir_x == 0
+                    self.dir_x = 0
                     self.decisionNeeded = True
         elif self.dir_x == -1:
                 nextCol = (self.x - GHOST_VEL) // TILE_SIZE
                 if not maze.is_wall(self.row, nextCol):
                     self.x += GHOST_VEL * self.dir_x
                 else:
-                    self.dir_x == 0
+                    self.dir_x = 0
                     self.decisionNeeded = True
         elif self.dir_y == 1:
                 nextRow = (self.y + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
                 if not maze.is_wall(nextRow, self.col):
                     self.y += GHOST_VEL * self.dir_y
                 else:
-                    self.dir_y == 0
+                    self.dir_y = 0
                     self.decisionNeeded = True
         elif self.dir_y == -1:
                 nextRow = (self.y - GHOST_VEL) // TILE_SIZE
                 if not maze.is_wall(nextRow, self.col):
                     self.y += GHOST_VEL * self.dir_y
                 else:
-                    self.dir_y == 0
+                    self.dir_y = 0
                     self.decisionNeeded = True
         
         self.row = self.y // TILE_SIZE
@@ -97,6 +98,7 @@ class Ghost:
         path = self.bfs(maze, [targetRow, targetCol])
 
         if len(path) < 2:
+            self.move_anywhere(maze)
             return  
 
         nextRow, nextCol = path[1]
@@ -133,9 +135,7 @@ class Ghost:
         cols = len(maze.layout[0])
         start = (self.row, self.col)
         prevNode = dict() # (ChildRow, ChildCol): (ParentRow, ParentCol)
-        visited = set()
-        visited.add(start)
-        visited.add(tuple(self.lastTile))
+        visited = {start, tuple(self.lastTile)}
 
         queue = deque([start])
 
