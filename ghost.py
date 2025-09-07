@@ -57,23 +57,23 @@ class Ghost:
             self.chase = False
     
     def make_decision_chase(self, pacman, maze):
-        path = self.bfs(maze, pacman)
+        path = self.bfs(maze, [pacman.row, pacman.col])
 
         if len(path) < 2:
             return  
 
         nextRow, nextCol = path[1]
 
-        if nextRow > self.row and not maze.is_wall(nextRow, self.col):
+        if nextRow > self.row and not maze.is_wall(nextRow, self.col) and nextRow < 19:
             self.dir_x = 0
             self.dir_y = 1
-        elif nextRow < self.row and not maze.is_wall(nextRow, self.col):
+        elif nextRow < self.row and not maze.is_wall(nextRow, self.col) and nextRow > 1:
             self.dir_x = 0
             self.dir_y = -1
-        elif nextCol > self.col and not maze.is_wall(self.row, nextCol):
+        elif nextCol > self.col and not maze.is_wall(self.row, nextCol) and nextCol < 19:
             self.dir_x = 1
             self.dir_y = 0
-        elif not maze.is_wall(self.row, nextCol):
+        elif not maze.is_wall(self.row, nextCol) and nextCol > 1:
             self.dir_x = -1
             self.dir_y = 0
         
@@ -105,45 +105,28 @@ class Ghost:
         if self.row == self.spawnRow and self.col == self.spawnCol:
             self.chase = True
             self.chaseTime += 120 # Chasing again, add 2 seconds to chaseTime
-        
+
     def make_decision_scatter(self, maze):
-        bestRoute = ""
-        shortestDist = 10000
-        if not maze.is_wall(self.row + 1, self.col) and self.lastTile != [self.row + 1, self.col] and self.row < 19: # Tile Down
-            shortestDist = abs((self.row + 1) - self.spawnRow) + abs(self.col - self.spawnCol)
-            bestRoute = 'D'
-        
-        if not maze.is_wall(self.row - 1, self.col) and self.lastTile != [self.row - 1, self.col] and self.row > 1: # Tile Up
-            dist = abs((self.row - 1) - self.spawnRow) + abs(self.col - self.spawnCol)
-            if dist < shortestDist:
-                shortestDist = dist
-                bestRoute = 'U'
+        path = self.bfs(maze, [self.spawnRow, self.spawnCol])
 
-        if not maze.is_wall(self.row, self.col + 1) and self.lastTile != [self.row, self.col + 1] and self.col < 19: # Tile Right
-            dist = abs(self.row - self.spawnRow) + abs((self.col + 1) - self.spawnCol)
-            if dist < shortestDist:
-                shortestDist = dist
-                bestRoute = 'R'
+        if len(path) < 2:
+            return  
 
-        if not maze.is_wall(self.row, self.col - 1) and self.lastTile != [self.row, self.col - 1] and self.col > 1: # Tile Left
-            dist = abs(self.row - self.spawnRow) + abs((self.col - 1) - self.spawnCol)
-            if dist < shortestDist:
-                shortestDist = dist
-                bestRoute = 'L'
-        
-        if bestRoute == 'D':
+        nextRow, nextCol = path[1]
+
+        if nextRow > self.row and not maze.is_wall(nextRow, self.col) and nextRow < 19:
             self.dir_x = 0
             self.dir_y = 1
-        elif bestRoute == 'U':
+        elif nextRow < self.row and not maze.is_wall(nextRow, self.col) and nextRow > 1:
             self.dir_x = 0
             self.dir_y = -1
-        elif bestRoute == 'R':
+        elif nextCol > self.col and not maze.is_wall(self.row, nextCol) and nextCol < 19:
             self.dir_x = 1
             self.dir_y = 0
-        elif bestRoute == 'L':
+        elif not maze.is_wall(self.row, nextCol) and nextCol > 1:
             self.dir_x = -1
             self.dir_y = 0
-
+        
         self.decisionNeeded = False
 
          
@@ -160,7 +143,7 @@ class Ghost:
             if self.row == self.y / TILE_SIZE:
                 self.decisionNeeded = True
     
-    def bfs(self, maze, pacman):
+    def bfs(self, maze, target):
         rows = len(maze.layout)
         cols = len(maze.layout[0])
         start = (self.row, self.col)
@@ -172,7 +155,7 @@ class Ghost:
         while queue:
             r, c = queue.popleft() # Current position in tree
 
-            if (r,c) == (pacman.row, pacman.col):
+            if (r,c) == (target[0], target[1]):
                 path = []
                 while (r,c) != start:
                     path.append((r,c)) # Starting from Pac-Man's location, return tiles all the way to start
