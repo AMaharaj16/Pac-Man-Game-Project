@@ -1,5 +1,6 @@
 import pygame
 from collections import deque
+from random import shuffle
 
 TILE_SIZE = 30
 GHOST_VEL = 2
@@ -41,7 +42,9 @@ class Ghost:
                 self.chaseTime += 120 # Chasing again, add 2 seconds to chaseTime
         
     def move_anywhere(self, maze):
-        for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+        nextDirections = [(1,0), (-1,0), (0,1), (0,-1)]
+        shuffle(nextDirections)
+        for dr, dc in nextDirections:
             nr, nc = self.row + dr, self.col + dc
             if not maze.is_wall(nr, nc) and [nr, nc] != self.lastTile and 0 < nr < 20 and 0 < nc < 20:
                 self.dir_x, self.dir_y = dc, dr
