@@ -35,6 +35,7 @@ class Ghost:
             self.move_towards(maze, pacman.row, pacman.col)
             if self.time > self.chaseTime:
                 self.chase = False
+                self.vel = 2
         else:
             self.time = 0
             self.move_towards(maze, self.spawnRow, self.spawnCol)
