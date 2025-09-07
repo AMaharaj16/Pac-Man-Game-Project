@@ -38,7 +38,7 @@ class Ghost:
         self.time += 1
         
         if self.decisionNeeded:
-            self.make_decision_chase(pacman, maze)
+            self.make_decision(maze, pacman.row, pacman.col)
         
         if self.dir_x == 1:
                 nextCol = (self.x + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
@@ -75,31 +75,6 @@ class Ghost:
         
         if self.time > self.chaseTime:
             self.chase = False
-    
-    def make_decision_chase(self, pacman, maze):
-        path = self.bfs(maze, [pacman.row, pacman.col])
-
-        if len(path) < 2:
-            return  
-
-        nextRow, nextCol = path[1]
-
-        if nextRow > self.row and not maze.is_wall(nextRow, self.col) and nextRow < 20:
-            self.dir_x = 0
-            self.dir_y = 1
-        elif nextRow < self.row and not maze.is_wall(nextRow, self.col) and nextRow > 1:
-            self.dir_x = 0
-            self.dir_y = -1
-        elif nextCol > self.col and not maze.is_wall(self.row, nextCol) and nextCol < 20:
-            self.dir_x = 1
-            self.dir_y = 0
-        elif not maze.is_wall(self.row, nextCol) and nextCol > 1:
-            self.dir_x = -1
-            self.dir_y = 0
-        
-        self.decisionNeeded = False
-
-
 
     def move_scatter(self, maze):
         self.time = 0
@@ -107,7 +82,7 @@ class Ghost:
         self.look_around()
         
         if self.decisionNeeded:
-            self.make_decision_scatter(maze)
+            self.make_decision_scatter(maze, self.spawnRow, self.spawnCol)
         
         if self.dir_x == 1:
                 nextCol = (self.x + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
@@ -145,9 +120,9 @@ class Ghost:
         if self.row == self.spawnRow and self.col == self.spawnCol:
             self.chase = True
             self.chaseTime += 120 # Chasing again, add 2 seconds to chaseTime
-
-    def make_decision_scatter(self, maze):
-        path = self.bfs(maze, [self.spawnRow, self.spawnCol])
+    
+    def make_decision(self, maze, targetRow, targetCol):
+        path = self.bfs(maze, [targetRow, targetCol])
 
         if len(path) < 2:
             return  
@@ -168,8 +143,6 @@ class Ghost:
             self.dir_y = 0
         
         self.decisionNeeded = False
-
-         
 
     def look_around(self):
         if self.dir_x == 0 and self.dir_y == 0:
