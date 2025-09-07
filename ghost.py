@@ -82,7 +82,7 @@ class Ghost:
         self.look_around()
         
         if self.decisionNeeded:
-            self.make_decision_scatter(maze, self.spawnRow, self.spawnCol)
+            self.make_decision(maze, self.spawnRow, self.spawnCol)
         
         if self.dir_x == 1:
                 nextCol = (self.x + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
@@ -132,13 +132,13 @@ class Ghost:
         if nextRow > self.row and not maze.is_wall(nextRow, self.col) and nextRow < 20:
             self.dir_x = 0
             self.dir_y = 1
-        elif nextRow < self.row and not maze.is_wall(nextRow, self.col) and nextRow > 1:
+        elif nextRow < self.row and not maze.is_wall(nextRow, self.col) and nextRow > 0:
             self.dir_x = 0
             self.dir_y = -1
         elif nextCol > self.col and not maze.is_wall(self.row, nextCol) and nextCol < 20:
             self.dir_x = 1
             self.dir_y = 0
-        elif not maze.is_wall(self.row, nextCol) and nextCol > 1:
+        elif not maze.is_wall(self.row, nextCol) and nextCol > 0:
             self.dir_x = -1
             self.dir_y = 0
         
@@ -149,11 +149,11 @@ class Ghost:
             self.decisionNeeded = True
         elif self.dir_x != 0:
             self.y = self.row * TILE_SIZE
-            if self.col == self.x / TILE_SIZE:
+            if self.x % TILE_SIZE == 0:
                 self.decisionNeeded = True
         elif self.dir_y != 0:
             self.x = self.col * TILE_SIZE
-            if self.row == self.y / TILE_SIZE:
+            if self.y % TILE_SIZE == 0:
                 self.decisionNeeded = True
     
     def bfs(self, maze, target):
