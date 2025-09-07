@@ -29,9 +29,16 @@ class Ghost:
         if self.dir_x == 0 and self.dir_y == 0:
              self.move_anywhere(maze)
         elif self.chase:
-            self.move_chase(maze, pacman)
+            self.time += 1
+            self.move_towards(maze, pacman.row, pacman.col)
+            if self.time > self.chaseTime:
+                self.chase = False
         else:
-            self.move_scatter(maze)
+            self.time = 0
+            self.move_towards(maze, self.spawnRow, self.spawnCol)
+            if self.row == self.spawnRow and self.col == self.spawnCol:
+                self.chase = True
+                self.chaseTime += 120 # Chasing again, add 2 seconds to chaseTime
         
     def move_anywhere(self, maze):
         self.lastTile == [self.row, self.col]
@@ -42,14 +49,12 @@ class Ghost:
                 self.decisionNeeded = False
                 return
     
-    def move_chase(self, maze, pacman):
-
+    def move_towards(self, maze, targetRow, targetCol):
         prevTile = [self.row, self.col]
         self.look_around()
-        self.time += 1
-        
+
         if self.decisionNeeded:
-            self.make_decision(maze, pacman.row, pacman.col)
+            self.make_decision(maze, targetRow, targetCol)
         
         if self.dir_x == 1:
                 nextCol = (self.x + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
@@ -79,7 +84,7 @@ class Ghost:
                 else:
                     self.dir_y == 0
                     self.decisionNeeded = True
-    
+        
         self.row = self.y // TILE_SIZE
         self.col = self.x // TILE_SIZE
 
@@ -87,59 +92,7 @@ class Ghost:
         
         if newTile != prevTile:
             self.lastTile = prevTile
-        
-        if self.time > self.chaseTime:
-            self.chase = False
 
-    def move_scatter(self, maze):
-        self.time = 0
-        prevTile = [self.row, self.col]
-        self.look_around()
-        
-        if self.decisionNeeded:
-            self.make_decision(maze, self.spawnRow, self.spawnCol)
-        
-        if self.dir_x == 1:
-                nextCol = (self.x + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
-                if not maze.is_wall(self.row, nextCol):
-                    self.x += GHOST_VEL * self.dir_x
-                else:
-                    self.dir_x == 0
-                    self.decisionNeeded = True
-        elif self.dir_x == -1:
-                nextCol = (self.x - GHOST_VEL) // TILE_SIZE
-                if not maze.is_wall(self.row, nextCol):
-                    self.x += GHOST_VEL * self.dir_x
-                else:
-                    self.dir_x == 0
-                    self.decisionNeeded = True
-        elif self.dir_y == 1:
-                nextRow = (self.y + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
-                if not maze.is_wall(nextRow, self.col):
-                    self.y += GHOST_VEL * self.dir_y
-                else:
-                    self.dir_y == 0
-                    self.decisionNeeded = True
-        elif self.dir_y == -1:
-                nextRow = (self.y - GHOST_VEL) // TILE_SIZE
-                if not maze.is_wall(nextRow, self.col):
-                    self.y += GHOST_VEL * self.dir_y
-                else:
-                    self.dir_y == 0
-                    self.decisionNeeded = True
-    
-        self.row = self.y // TILE_SIZE
-        self.col = self.x // TILE_SIZE
-
-        newTile = [self.row, self.col]
-        
-        if newTile != prevTile:
-            self.lastTile = prevTile
-        
-        if self.row == self.spawnRow and self.col == self.spawnCol:
-            self.chase = True
-            self.chaseTime += 120 # Chasing again, add 2 seconds to chaseTime
-    
     def make_decision(self, maze, targetRow, targetCol):
         path = self.bfs(maze, [targetRow, targetCol])
 
