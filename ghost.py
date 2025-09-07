@@ -40,10 +40,30 @@ class Ghost:
         if self.decisionNeeded:
             self.make_decision_chase(pacman, maze)
         
-        if self.dir_x != 0:
-                self.x += GHOST_VEL * self.dir_x
-        elif self.dir_y != 0:
-                self.y += GHOST_VEL * self.dir_y
+        if self.dir_x == 1:
+                nextCol = (self.x + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
+                if not maze.is_wall(self.row, nextCol):
+                    self.x += GHOST_VEL * self.dir_x
+                else:
+                    self.decisionNeeded = True
+        elif self.dir_x == -1:
+                nextCol = (self.x - GHOST_VEL) // TILE_SIZE
+                if not maze.is_wall(self.row, nextCol):
+                    self.x += GHOST_VEL * self.dir_x
+                else:
+                    self.decisionNeeded = True
+        elif self.dir_y == 1:
+                nextRow = (self.y + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
+                if not maze.is_wall(nextRow, self.col):
+                    self.y += GHOST_VEL * self.dir_y
+                else:
+                    self.decisionNeeded = True
+        elif self.dir_y == -1:
+                nextRow = (self.y - GHOST_VEL) // TILE_SIZE
+                if not maze.is_wall(nextRow, self.col):
+                    self.y += GHOST_VEL * self.dir_y
+                else:
+                    self.decisionNeeded = True
     
         self.row = self.y // TILE_SIZE
         self.col = self.x // TILE_SIZE
@@ -64,13 +84,13 @@ class Ghost:
 
         nextRow, nextCol = path[1]
 
-        if nextRow > self.row and not maze.is_wall(nextRow, self.col) and nextRow < 19:
+        if nextRow > self.row and not maze.is_wall(nextRow, self.col) and nextRow < 20:
             self.dir_x = 0
             self.dir_y = 1
         elif nextRow < self.row and not maze.is_wall(nextRow, self.col) and nextRow > 1:
             self.dir_x = 0
             self.dir_y = -1
-        elif nextCol > self.col and not maze.is_wall(self.row, nextCol) and nextCol < 19:
+        elif nextCol > self.col and not maze.is_wall(self.row, nextCol) and nextCol < 20:
             self.dir_x = 1
             self.dir_y = 0
         elif not maze.is_wall(self.row, nextCol) and nextCol > 1:
@@ -89,10 +109,30 @@ class Ghost:
         if self.decisionNeeded:
             self.make_decision_scatter(maze)
         
-        if self.dir_x != 0:
-                self.x += GHOST_VEL * self.dir_x
-        elif self.dir_y != 0:
-                self.y += GHOST_VEL * self.dir_y
+        if self.dir_x == 1:
+                nextCol = (self.x + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
+                if not maze.is_wall(self.row, nextCol):
+                    self.x += GHOST_VEL * self.dir_x
+                else:
+                    self.decisionNeeded = True
+        elif self.dir_x == -1:
+                nextCol = (self.x - GHOST_VEL) // TILE_SIZE
+                if not maze.is_wall(self.row, nextCol):
+                    self.x += GHOST_VEL * self.dir_x
+                else:
+                    self.decisionNeeded = True
+        elif self.dir_y == 1:
+                nextRow = (self.y + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
+                if not maze.is_wall(nextRow, self.col):
+                    self.y += GHOST_VEL * self.dir_y
+                else:
+                    self.decisionNeeded = True
+        elif self.dir_y == -1:
+                nextRow = (self.y - GHOST_VEL) // TILE_SIZE
+                if not maze.is_wall(nextRow, self.col):
+                    self.y += GHOST_VEL * self.dir_y
+                else:
+                    self.decisionNeeded = True
     
         self.row = self.y // TILE_SIZE
         self.col = self.x // TILE_SIZE
@@ -114,13 +154,13 @@ class Ghost:
 
         nextRow, nextCol = path[1]
 
-        if nextRow > self.row and not maze.is_wall(nextRow, self.col) and nextRow < 19:
+        if nextRow > self.row and not maze.is_wall(nextRow, self.col) and nextRow < 20:
             self.dir_x = 0
             self.dir_y = 1
         elif nextRow < self.row and not maze.is_wall(nextRow, self.col) and nextRow > 1:
             self.dir_x = 0
             self.dir_y = -1
-        elif nextCol > self.col and not maze.is_wall(self.row, nextCol) and nextCol < 19:
+        elif nextCol > self.col and not maze.is_wall(self.row, nextCol) and nextCol < 20:
             self.dir_x = 1
             self.dir_y = 0
         elif not maze.is_wall(self.row, nextCol) and nextCol > 1:
@@ -148,7 +188,9 @@ class Ghost:
         cols = len(maze.layout[0])
         start = (self.row, self.col)
         prevNode = dict() # (ChildRow, ChildCol): (ParentRow, ParentCol)
-        visited = [start, tuple(self.lastTile)]
+        visited = set()
+        visited.add(start)
+        visited.add(tuple(self.lastTile))
 
         queue = deque([start])
 
@@ -163,14 +205,14 @@ class Ghost:
                 path.append(start)
                 return path[::-1] # Reverse path so it gives path to Pac-Man, not from
 
-            for xdir, ydir in [(1,0), (0,1), (-1,0), (0,-1)]: # Check all 4 directions
-                rNext = r + ydir
-                cNext = c + xdir
+            for dr, dc in [(1,0), (0,1), (-1,0), (0,-1)]: # Check all 4 directions
+                rNext = r + dr
+                cNext = c + dc
 
                 if 0 <= rNext < rows and 0 <= cNext < cols and maze.layout[rNext][cNext] == 0 and (rNext, cNext) not in visited:
                     prevNode[(rNext, cNext)] = (r, c)
                     queue.append((rNext,cNext))
-                    visited.append((rNext,cNext))
+                    visited.add((rNext,cNext))
         return []
 
 
