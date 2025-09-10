@@ -6,6 +6,7 @@ from random import shuffle
 TILE_SIZE = 30
 GHOST_IMAGE_UNSCALED = pygame.image.load('pacman_ghost.png')
 GHOST_IMAGE = pygame.transform.scale(GHOST_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE))
+GHOST_VEL = 2
 
 class Ghost:
     def __init__(self, row, col, dir_x, dir_y, chase, time):
@@ -22,7 +23,6 @@ class Ghost:
         self.chase = chase
         self.time = time
         self.chaseTime = 300 # Starts chasing time at 5 seconds
-        self.vel = 2
 
     def draw(self, window):
         window.blit(GHOST_IMAGE, (self.x, self.y))
@@ -35,14 +35,12 @@ class Ghost:
             self.move_towards(maze, pacman.row, pacman.col)
             if self.time > self.chaseTime:
                 self.chase = False
-                self.vel = 2
         else:
             self.time = 0
             self.move_towards(maze, self.spawnRow, self.spawnCol)
             if self.row == self.spawnRow and self.col == self.spawnCol:
                 self.chase = True
                 self.chaseTime += 120 # Chasing again, add 2 seconds to chaseTime
-                self.vel = random.randrange(0,4)
         
     def move_anywhere(self, maze):
         nextDirections = [(1,0), (-1,0), (0,1), (0,-1)]
@@ -64,30 +62,30 @@ class Ghost:
             self.make_decision(maze, targetRow, targetCol)
         
         if self.dir_x == 1:
-                nextCol = (self.x + self.vel + TILE_SIZE - 1) // TILE_SIZE
+                nextCol = (self.x + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
                 if not maze.is_wall(self.row, nextCol):
-                    self.x += self.vel * self.dir_x
+                    self.x += GHOST_VEL * self.dir_x
                 else:
                     self.dir_x = 0
                     self.decisionNeeded = True
         elif self.dir_x == -1:
-                nextCol = (self.x - self.vel) // TILE_SIZE
+                nextCol = (self.x - GHOST_VEL) // TILE_SIZE
                 if not maze.is_wall(self.row, nextCol):
-                    self.x += self.vel * self.dir_x
+                    self.x += GHOST_VEL * self.dir_x
                 else:
                     self.dir_x = 0
                     self.decisionNeeded = True
         elif self.dir_y == 1:
-                nextRow = (self.y + self.vel + TILE_SIZE - 1) // TILE_SIZE
+                nextRow = (self.y + GHOST_VEL + TILE_SIZE - 1) // TILE_SIZE
                 if not maze.is_wall(nextRow, self.col):
-                    self.y += self.vel * self.dir_y
+                    self.y += GHOST_VEL * self.dir_y
                 else:
                     self.dir_y = 0
                     self.decisionNeeded = True
         elif self.dir_y == -1:
-                nextRow = (self.y - self.vel) // TILE_SIZE
+                nextRow = (self.y - GHOST_VEL) // TILE_SIZE
                 if not maze.is_wall(nextRow, self.col):
-                    self.y += self.vel * self.dir_y
+                    self.y += GHOST_VEL * self.dir_y
                 else:
                     self.dir_y = 0
                     self.decisionNeeded = True
