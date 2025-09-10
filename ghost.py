@@ -32,7 +32,17 @@ class Ghost:
              self.move_anywhere(maze)
         elif self.chase:
             self.time += 1
-            self.move_towards(maze, pacman.row, pacman.col)
+            targetRow = pacman.row + TILE_SIZE*pacman.dir_y
+            targetCol = pacman.col + TILE_SIZE*pacman.dir_x
+            
+            try:
+                if maze.isWall(targetRow, targetCol):
+                    targetRow = pacman.row
+                    targetCol = pacman.col
+            except:
+                targetRow = pacman.row
+                targetCol = pacman.col
+            self.move_towards(maze, targetRow, targetCol)
             if self.time > self.chaseTime:
                 self.chase = False
         else:
