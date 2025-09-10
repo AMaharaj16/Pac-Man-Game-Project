@@ -111,6 +111,10 @@ class Pacman:
             return not maze.is_wall(row_top, col) and not maze.is_wall(row_bottom, col)
         
         return False
+    
+    # Will look at max 5 tiles ahead of pacman, ghosts will chase there instead.
+    def chase_tile_ahead(self, maze):
+        return
 
 
 def draw(window, maze, pacman, pellets, ghosts):
