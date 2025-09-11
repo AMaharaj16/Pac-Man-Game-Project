@@ -15,7 +15,7 @@ class Maze:
         for dr, dc in [(1,0), (0,1), (-1,0), (0,-1)]:
             nextRow = row + dr
             nextCol = col + dc
-            if 0 <= dr < len(self.layout) and 0 <= dc < len(self.layout[0]) and not self.is_wall(nextRow, nextCol):
+            if 0 <= nextRow < len(self.layout) and 0 <= nextCol < len(self.layout[0]) and not self.is_wall(nextRow, nextCol):
                 directions += 1
         return directions > 2
     

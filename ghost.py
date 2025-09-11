@@ -32,7 +32,7 @@ class Ghost:
              self.move_anywhere(maze)
         elif self.chase:
             self.time += 1
-            if (abs(self.row - pacman.row) + abs(self.col - pacman.col)) < 7:
+            if (abs(self.row - pacman.row) + abs(self.col - pacman.col)) < 5:
                 self.move_towards(maze, pacman.row, pacman.col)
             else:
                 targetRow, targetCol = pacman.chase_tile_ahead(maze)

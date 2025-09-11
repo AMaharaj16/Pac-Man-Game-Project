@@ -130,6 +130,9 @@ class Pacman:
             targetRow = nextRow
             targetCol = nextCol
 
+            if maze.is_intersection(nextRow, nextCol):
+                break
+
         return targetRow, targetCol        
 
 
