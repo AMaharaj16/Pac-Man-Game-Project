@@ -186,7 +186,7 @@ def main(window):
 
     pellets = initialize_pellets(maze)
 
-    ghosts = [Ghost(1, 1, 1, 0, True, 0), Ghost(1, 19, 0, 1, True, 75), Ghost(19, 1, 0, -1, True, 150), Ghost(19, 19, -1, 0, True, 225)]
+    ghosts = [Ghost(1, 1, 1, 0, 0), Ghost(1, 19, 0, 1, 75), Ghost(19, 1, 0, -1, 150), Ghost(19, 19, -1, 0, 225)]
     
     while run:
         clock.tick(FPS)

@@ -9,7 +9,7 @@ GHOST_IMAGE = pygame.transform.scale(GHOST_IMAGE_UNSCALED, (TILE_SIZE, TILE_SIZE
 GHOST_VEL = 2
 
 class Ghost:
-    def __init__(self, row, col, dir_x, dir_y, chase, time):
+    def __init__(self, row, col, dir_x, dir_y, time):
         self.row = row
         self.col = col
         self.spawnRow = row
@@ -20,7 +20,7 @@ class Ghost:
         self.dir_y = dir_y
         self.decisionNeeded = False
         self.lastTile = [row, col]
-        self.chase = chase
+        self.chase = True
         self.time = time
         self.chaseTime = 300 # Starts chasing time at 5 seconds
 
