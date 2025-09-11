@@ -117,24 +117,19 @@ class Pacman:
         targetRow = self.row
         targetCol = self.col
 
-        if self.dir_x != 0:
-            for i in range(1,6):
-                try:
-                    if maze.is_wall(targetRow, targetCol):
-                        return targetRow, targetCol - self.dir_x
-                    targetCol += self.dir_x
-                except:
-                    break
-        
-        elif self.dir_y != 0:
-            for i in range(1,6):
-                try:
-                    if maze.is_wall(targetRow, targetCol):
-                        return targetRow - self.dir_y, targetCol
-                    targetRow += self.dir_y
-                except: 
-                    break
-        
+        for _ in range(5):
+            nextRow = targetRow + self.dir_y
+            nextCol = targetCol + self.dir_x
+
+            if not (0 <= nextRow < len(maze.layout) and 0 <= nextCol < len(maze.layout[0])):
+                break
+
+            if maze.is_wall(nextRow, nextCol):
+                break
+
+            targetRow = nextRow
+            targetCol = nextCol
+
         return targetRow, targetCol        
 
 
